@@ -1,0 +1,258 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#090909">
+<meta name="description" content="NTZ Music — Your Music. Your World.">
+<title>NTZ Music</title>
+<style>
+:root{color-scheme:dark;--red:#ff2638;--bg:#090909;--panel:#151515;--muted:#999}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+.app{max-width:760px;margin:auto;padding:24px 20px 220px}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{font-size:43px;color:var(--red)}
+h1{font-size:23px;margin:0}
+h1 span,.hero h2 span{color:var(--red)}
+.tagline{color:var(--muted);font-size:11px;margin-top:5px}
+.online{color:#61e6a0;font-size:10px}
+.hero{margin-top:32px;padding:28px 22px;border:1px solid #42151b;border-radius:22px;background:radial-gradient(circle at top right,#491018,#171011 48%,#111)}
+.eyebrow{color:var(--red);font-size:10px;letter-spacing:2px;font-weight:800}
+.hero h2{font-size:clamp(32px,8vw,44px);line-height:1.1;letter-spacing:-1.5px;margin:20px 0 12px}
+.hero p:not(.eyebrow){color:#bbb;font-size:13px;line-height:1.6}
+.primary{display:inline-block;margin-top:12px;padding:14px 17px;border:0;border-radius:12px;background:var(--red);color:white;font-size:12px;font-weight:700}
+.section-head{display:flex;align-items:center;justify-content:space-between;margin:30px 0 15px}
+.section-head h2{font-size:18px;margin:0}
+.count{font-size:11px;color:var(--muted)}
+.search{width:100%;padding:15px;background:var(--panel);border:1px solid #292929;border-radius:12px;color:white;outline:none}
+.search:focus{border-color:var(--red)}
+.song{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid #242424}
+.cover{display:grid;place-items:center;flex-shrink:0;width:46px;height:46px;border-radius:10px;background:#2b1015;color:var(--red);font-size:23px}
+.song-info{flex:1;min-width:0}
+.song-info strong,.song-info small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.song-info strong{font-size:12px}
+.song-info small{font-size:10px;color:var(--muted);margin-top:5px}
+.song button{border:0;background:none;color:#ccc;padding:8px}
+.song button.fav{color:var(--red)}
+.empty{text-align:center;padding:30px 10px;color:var(--muted)}
+.empty .note{font-size:36px;color:var(--red)}
+.empty h3{font-size:14px;color:#fff}
+.empty p{font-size:12px}
+.player{position:fixed;z-index:5;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:760px;padding:14px 20px max(18px,env(safe-area-inset-bottom));background:#171717;border-top:1px solid #432027}
+.now{display:flex;align-items:center;gap:12px}
+.now-info{min-width:0;flex:1}
+.now-info strong,.now-info small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.now-info strong{font-size:12px}
+.now-info small{font-size:10px;color:var(--muted);margin-top:5px}
+.controls{display:flex;align-items:center;justify-content:center;gap:25px;margin:13px 0}
+.controls button{background:none;border:0;color:white;font-size:16px}
+.controls .play{width:43px;height:43px;border-radius:50%;background:var(--red)}
+.timeline{display:flex;align-items:center;gap:9px;color:var(--muted);font-size:10px}
+.timeline input{flex:1;min-width:0;accent-color:var(--red)}
+@media(min-width:600px){.app{padding-top:35px}.hero{padding:40px}}
+</style>
+</head>
+<body>
+<main class="app">
+<header>
+  <div class="brand">
+    <span class="logo">♫</span>
+    <div>
+      <h1>NTZ <span>Music</span></h1>
+      <div class="tagline">Your Music. Your World.</div>
+    </div>
+  </div>
+  <span class="online">● PLAYER</span>
+</header>
+
+<section class="hero">
+  <div class="eyebrow">YOUR PERSONAL SOUND</div>
+  <h2>Sua música.<br><span>Seu universo.</span></h2>
+  <p>Sua biblioteca musical, do seu jeito.</p>
+  <label class="primary" style="cursor:pointer">
+    + Adicionar músicas
+    <input id="files" type="file" accept="audio/*" multiple hidden>
+  </label>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Sua biblioteca</h2>
+    <span class="count" id="count">0 músicas</span>
+  </div>
+  <input id="search" class="search" placeholder="⌕  Buscar música..." aria-label="Buscar música">
+  <div id="songs">
+    <div class="empty">
+      <div class="note">♫</div>
+      <h3>Sua biblioteca começa aqui</h3>
+      <p>Adicione arquivos de áudio para começar.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="player">
+  <div class="now">
+    <div class="cover">♫</div>
+    <div class="now-info">
+      <strong id="trackName">Nenhuma música</strong>
+      <small id="artist">Escolha um arquivo de áudio</small>
+    </div>
+  </div>
+  <div class="controls">
+    <button id="back" aria-label="Música anterior">|◀</button>
+    <button id="play" class="play" aria-label="Reproduzir ou pausar">▶</button>
+    <button id="next" aria-label="Próxima música">▶|</button>
+  </div>
+  <div class="timeline">
+    <span id="current">0:00</span>
+    <input id="progress" type="range" min="0" max="100" value="0" aria-label="Progresso">
+    <span id="duration">0:00</span>
+  </div>
+  <audio id="audio" preload="metadata"></audio>
+</footer>
+
+<script>
+const audio=document.querySelector("#audio");
+const fileInput=document.querySelector("#files");
+const list=document.querySelector("#songs");
+const search=document.querySelector("#search");
+let songs=[];
+let currentIndex=-1;
+let favorites=new Set();
+let activeUrl=null;
+
+function timeText(value){
+  if(!Number.isFinite(value))return "0:00";
+  return Math.floor(value/60)+":"+String(Math.floor(value%60)).padStart(2,"0");
+}
+
+function render(){
+  const query=search.value.trim().toLowerCase();
+  const visible=songs.map((song,index)=>({song,index}))
+    .filter(item=>item.song.name.toLowerCase().includes(query));
+
+  document.querySelector("#count").textContent=
+    songs.length+" música"+(songs.length===1?"":"s");
+  list.replaceChildren();
+
+  if(!visible.length){
+    const empty=document.createElement("div");
+    empty.className="empty";
+    const note=document.createElement("div");
+    note.className="note";
+    note.textContent="♫";
+    const title=document.createElement("h3");
+    title.textContent=songs.length?"Nenhum resultado":"Sua biblioteca começa aqui";
+    const message=document.createElement("p");
+    message.textContent=songs.length?"Tente outra pesquisa.":"Adicione arquivos de áudio para começar.";
+    empty.append(note,title,message);
+    list.append(empty);
+    return;
+  }
+
+  visible.forEach(({song,index})=>{
+    const row=document.createElement("div");
+    row.className="song";
+    const cover=document.createElement("div");
+    cover.className="cover";
+    cover.textContent="♫";
+    const info=document.createElement("div");
+    info.className="song-info";
+    const title=document.createElement("strong");
+    title.textContent=song.name;
+    const subtitle=document.createElement("small");
+    subtitle.textContent="Arquivo de áudio local";
+    info.append(title,subtitle);
+
+    const fav=document.createElement("button");
+    fav.className=favorites.has(index)?"fav":"";
+    fav.textContent=favorites.has(index)?"♥":"♡";
+    fav.setAttribute("aria-label","Favoritar");
+    fav.onclick=()=>{
+      if(favorites.has(index))favorites.delete(index);
+      else favorites.add(index);
+      render();
+    };
+
+    const playButton=document.createElement("button");
+    playButton.textContent=currentIndex===index&&!audio.paused?"Ⅱ":"▶";
+    playButton.setAttribute("aria-label","Reproduzir");
+    playButton.onclick=()=>playSong(index);
+    row.append(cover,info,fav,playButton);
+    list.append(row);
+  });
+}
+
+function playSong(index){
+  if(index<0||index>=songs.length)return;
+  currentIndex=index;
+  if(activeUrl)URL.revokeObjectURL(activeUrl);
+  activeUrl=URL.createObjectURL(songs[index].file);
+  audio.src=activeUrl;
+  document.querySelector("#trackName").textContent=songs[index].name;
+  document.querySelector("#artist").textContent="Sua biblioteca";
+  audio.play().catch(()=>{});
+  render();
+}
+
+fileInput.addEventListener("change",event=>{
+  const selected=Array.from(event.target.files||[]);
+  selected.forEach(file=>{
+    songs.push({name:file.name.replace(/\.[^.]+$/,""),file});
+  });
+  const firstNew=songs.length-selected.length;
+  render();
+  if(currentIndex===-1&&selected.length)playSong(firstNew);
+  fileInput.value="";
+});
+
+document.querySelector("#play").onclick=()=>{
+  if(currentIndex===-1){
+    if(songs.length)playSong(0);
+  }else if(audio.paused){
+    audio.play().catch(()=>{});
+  }else{
+    audio.pause();
+  }
+};
+
+document.querySelector("#next").onclick=()=>{
+  if(songs.length)playSong((currentIndex+1)%songs.length);
+};
+document.querySelector("#back").onclick=()=>{
+  if(songs.length)playSong((currentIndex-1+songs.length)%songs.length);
+};
+
+audio.addEventListener("play",()=>{
+  document.querySelector("#play").textContent="Ⅱ";
+  render();
+});
+audio.addEventListener("pause",()=>{
+  document.querySelector("#play").textContent="▶";
+  render();
+});
+audio.addEventListener("ended",()=>{
+  if(songs.length>1)playSong((currentIndex+1)%songs.length);
+});
+audio.addEventListener("loadedmetadata",()=>{
+  document.querySelector("#duration").textContent=timeText(audio.duration);
+});
+audio.addEventListener("timeupdate",()=>{
+  document.querySelector("#current").textContent=timeText(audio.currentTime);
+  document.querySelector("#progress").value=
+    audio.duration?audio.currentTime/audio.duration*100:0;
+});
+document.querySelector("#progress").oninput=event=>{
+  if(audio.duration)audio.currentTime=Number(event.target.value)/100*audio.duration;
+};
+search.addEventListener("input",render);
+render();
+</script>
+</body>
+</html>
