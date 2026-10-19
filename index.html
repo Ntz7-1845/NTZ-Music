@@ -172,6 +172,10 @@ function render(){
     subtitle.textContent="Arquivo de áudio local";
     info.append(title,subtitle);
 
+const fav=document.createElement("button");
+
+fav.className=favorites.has(song.name)?"fav":"";
+
     fav.className=favorites.has(song.name)?"fav":"";
 fav.textContent=favorites.has(song.name)?"♥":"♡";
 fav.setAttribute("aria-label","Favoritar");
