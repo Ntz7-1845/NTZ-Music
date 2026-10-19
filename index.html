@@ -172,15 +172,21 @@ function render(){
     subtitle.textContent="Arquivo de áudio local";
     info.append(title,subtitle);
 
-    const fav=document.createElement("button");
-    fav.className=favorites.has(index)?"fav":"";
-    fav.textContent=favorites.has(index)?"♥":"♡";
-    fav.setAttribute("aria-label","Favoritar");
-    fav.onclick=()=>{
-      if(favorites.has(index))favorites.delete(index);
-      else favorites.add(index);
-      render();
-    };
+    fav.className=favorites.has(song.name)?"fav":"";
+fav.textContent=favorites.has(song.name)?"♥":"♡";
+fav.setAttribute("aria-label","Favoritar");
+fav.onclick=()=>{
+  if(favorites.has(song.name)){
+    favorites.delete(song.name);
+  }else{
+    favorites.add(song.name);
+  }
+  localStorage.setItem(
+    "ntzMusicFavorites",
+    JSON.stringify([...favorites])
+  );
+  render();
+};
 
     const playButton=document.createElement("button");
     playButton.textContent=currentIndex===index&&!audio.paused?"Ⅱ":"▶";
