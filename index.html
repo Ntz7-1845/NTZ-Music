@@ -124,7 +124,9 @@ const list=document.querySelector("#songs");
 const search=document.querySelector("#search");
 let songs=[];
 let currentIndex=-1;
-let favorites=new Set();
+let favorites=new Set(
+  JSON.parse(localStorage.getItem("ntzMusicFavorites") || "[]")
+);
 let activeUrl=null;
 
 function timeText(value){
